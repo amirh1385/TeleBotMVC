@@ -7,10 +7,8 @@ use Libs\TelegramDecoder\TelegramResponse;
 
 class start{
     public static function start(TelegramResponse $update){
-        $view1 = view("welcome");
-        $update->message->reply_text($view1, [
-            [['text' => 'دکمه 1', 'callback_data' => 'action_1']],
-            [['text' => 'دکمه 2', 'callback_data' => 'action_2']]
-        ]); 
+        $view1 = view("welcome.html");
+        error_log(json_encode($view1["keyboard"]));
+        // $update->message->reply_text(json_encode($view1['keyboard']), $view1['keyboard']); 
     }
 }

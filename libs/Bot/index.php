@@ -13,6 +13,7 @@ class Bot{
     }
 
     public static function sendGetRequest($url, $params = []) {
+        error_log($url);
         // اضافه کردن پارامترها به URL
         if (!empty($params)) {
             $url .= '?' . http_build_query($params);
