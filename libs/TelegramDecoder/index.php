@@ -85,9 +85,16 @@ class Message {
         }
     }
 
-    public function reply_text($text, $reply_keyboard = null){
-        Bot::sendMessage($this->from->id, $text, $this->message_id, $reply_keyboard);
-        error_log("132");
+    public function reply_text($text = null, $reply_keyboard = null, $View = null){
+        if($View != null){
+            Bot::sendMessage($this->from->id, $View["text"], $this->message_id, $View["keyboard"]);    
+        }else{
+            Bot::sendMessage($this->from->id, $text, $this->message_id, [
+                [
+                    ['text' => 'Hello', 'callback_data' => 'hello_callback']
+                ]
+            ]);
+        }
     }
 }
 

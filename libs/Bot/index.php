@@ -13,7 +13,8 @@ class Bot{
     }
 
     public static function sendGetRequest($url, $params = []) {
-        error_log($url);
+        error_log(json_encode($params));
+        // error_log($url);
         // اضافه کردن پارامترها به URL
         if (!empty($params)) {
             $url .= '?' . http_build_query($params);
@@ -62,7 +63,8 @@ class Bot{
             $data['reply_to_message_id'] = $reply;
         }
         if ($reply_keyboard !== null) {
-            $data['reply_markup'] = json_encode(["inline_keyboard" => $reply_keyboard]);
+            // $data['reply_markup'] = ["inline_keyboard" => $reply_keyboard];
+            $data['reply_markup'] = '{"inline_keyboard": [[{ text: "Press here", callback_data: "TEST" }]]}';
         }
         
         self::sendGetRequest($url, $data);
