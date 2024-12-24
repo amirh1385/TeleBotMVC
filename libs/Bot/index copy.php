@@ -1,7 +1,8 @@
 <?php
+
 namespace Libs\Bot;
 
-class Bot {
+class Bot{
 
     public static function getToken(){
         return parse_ini_file("config.ini", true)["bot"]["token"];
@@ -12,7 +13,9 @@ class Bot {
     }
 
     public static function sendGetRequest($url, $params = []) {
-
+        error_log(json_encode($params));
+        // error_log($url);
+        // اضافه کردن پارامترها به URL
         if (!empty($params)) {
             $url .= '?' . http_build_query($params);
         }
@@ -39,14 +42,13 @@ class Bot {
         // بررسی پاسخ HTTP
         if ($httpCode !== 200) {
             error_log("خطای HTTP: کد پاسخ " . $httpCode);
-            $responseData = json_decode($response, true);
-            error_log("Telegram Error: " . $responseData['description']);
             return null; // یا می‌توانید یک استثنا پرتاب کنید
         }
         
         return $response;
     }
     
+
     public static function sendMessage($chat_id, $text, $reply = null, $reply_keyboard = null) {
         // ساخت URL اصلی
         $url = self::getBaseURL() . self::getToken() . "/sendMessage";
@@ -60,12 +62,11 @@ class Bot {
         if ($reply !== null) {
             $data['reply_to_message_id'] = $reply;
         }
-
         if ($reply_keyboard !== null) {
-            // تبدیل آرایه دکمه‌ها به فرمت JSON مورد نیاز تلگرام
-            error_log(json_encode(['inline_keyboard' => $reply_keyboard]));
-            $data['reply_markup'] = json_encode(['inline_keyboard' => $reply_keyboard]);
+            // $data['reply_markup'] = ["inline_keyboard" => $reply_keyboard];
+            $data['reply_markup'] = '{"inline_keyboard": [[{ text: "Press here", callback_data: "TEST" }]]}';
         }
+        
         self::sendGetRequest($url, $data);
-    }
+    }    
 }

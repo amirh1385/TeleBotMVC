@@ -59,36 +59,71 @@ $twig = new \Twig\Environment($loader, [
 // }
 
 
-function view($name, $data = []) {
-    global $twig;
-    // بارگذاری XML به شیء SimpleXMLElement
-    $xmlObject = simplexml_load_string($twig->render($name, $data));
+// function view($name, $data = []) {
+//     global $twig;
+//     // بارگذاری XML به شیء SimpleXMLElement
+//     $xmlObject = simplexml_load_string($twig->render($name, $data));
     
-    // استخراج متن از تگ <text>
-    $text = (string) $xmlObject->text;
+//     // استخراج متن از تگ <text>
+//     $text = (string) $xmlObject->text;
     
-    // ایجاد آرایه برای اینلاین کیبورد
-    $keyboard = [];
+//     // ایجاد آرایه برای اینلاین کیبورد
+//     $keyboard = [];
     
-    // پیمایش هر ردیف از کیبورد
-    foreach ($xmlObject->inlinekeyboard->keyboardRow as $row) {
-        $rowArray = [];
+//     // پیمایش هر ردیف از کیبورد
+//     foreach ($xmlObject->inlinekeyboard->keyboardRow as $row) {
+//         $rowArray = [];
         
-        // استخراج هر کلید از ردیف
-        foreach ($row->key as $key) {
-            $rowArray[] = ['text' => (string)$key];
+//         // استخراج هر کلید از ردیف
+//         foreach ($row->key as $key) {
+//             $rowArray[] = ['text' => (string)$key];
+//         }
+        
+//         // افزودن ردیف به آرایه کیبورد
+//         $keyboard[] = $rowArray;
+//     }
+    
+//     // برگشت داده‌ها به صورت آرایه
+//     return [
+//         'text' => $text,
+//         'keyboard' => $keyboard
+//     ];
+// }
+
+
+function parseAttributes($input) {
+    // الگوی منظم برای جلب داده‌ها
+    $pattern = '/\(([^)]+)\)/';
+
+    // استخراج داده‌ها
+    preg_match_all($pattern, $input, $matches);
+
+    // آرایه برای ذخیره اتریبیوت‌ها
+    $result = [];
+
+    foreach ($matches[1] as $match) {
+        // تقسیم هر عبارت داخل پرانتز
+        $attributes = [];
+        preg_match_all('/(\w+)="([^"]+)"/', $match, $attrMatches);
+        
+        // ذخیره اتریبیوت‌ها در آرایه
+        foreach ($attrMatches[1] as $key => $attribute) {
+            $attributes[$attribute] = $attrMatches[2][$key];
         }
         
-        // افزودن ردیف به آرایه کیبورد
-        $keyboard[] = $rowArray;
+        // اضافه کردن آرایه اتریبیوت‌ها به آرایه اصلی
+        $result[] = $attributes;
     }
-    
-    // برگشت داده‌ها به صورت آرایه
-    return [
-        'text' => $text,
-        'keyboard' => $keyboard
-    ];
+
+    return $result;
 }
+
+function view($name, $datas = []) {
+    global $twig;
+    $file = $twig->render($name, $datas);
+
+}
+
 
 function loadControllers($directory = __DIR__ . '/controllers') {
     // اسکن فایل‌ها در پوشه

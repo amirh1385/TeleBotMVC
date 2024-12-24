@@ -85,15 +85,12 @@ class Message {
         }
     }
 
-    public function reply_text($text = null, $reply_keyboard = null, $View = null){
+    public function reply_text($View = null, $reply_keyboard = null, $text = null){
         if($View != null){
-            Bot::sendMessage($this->from->id, $View["text"], $this->message_id, $View["keyboard"]);    
+            Bot::sendMessage($this->from->id, $View["text"], $this->message_id, $View["reply_markup"]["inline_keyboard"]);    
         }else{
-            Bot::sendMessage($this->from->id, $text, $this->message_id, [
-                [
-                    ['text' => 'Hello', 'callback_data' => 'hello_callback']
-                ]
-            ]);
+            error_log(json_encode($reply_keyboard));
+            Bot::sendMessage($this->from->id, $text, $this->message_id, $reply_keyboard);
         }
     }
 }
