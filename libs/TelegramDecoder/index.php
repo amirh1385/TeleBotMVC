@@ -87,9 +87,8 @@ class Message {
 
     public function reply_text($View = null, $reply_keyboard = null, $text = null){
         if($View != null){
-            Bot::sendMessage($this->from->id, $View["text"], $this->message_id, $View["reply_markup"]["inline_keyboard"]);    
+            Bot::sendMessage($this->from->id, $View->text, $this->message_id, $View->inline_keyboard);    
         }else{
-            error_log(json_encode($reply_keyboard));
             Bot::sendMessage($this->from->id, $text, $this->message_id, $reply_keyboard);
         }
     }
