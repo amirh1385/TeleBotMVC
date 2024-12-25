@@ -95,9 +95,9 @@ class Message {
 
     public function reply_text($View = null, $reply_keyboard = null, $text = null){
         if($View != null){
-            return new Message(Bot::sendMessage($this->from->id, $View->text, $this->message_id, $View->inline_keyboard));    
+            return new Message(Bot::sendMessage($this->from->id, $View->text, $this->message_id, $View->inline_keyboard)["result"]);    
         }else{
-            return new Message(Bot::sendMessage($this->from->id, $text, $this->message_id, $reply_keyboard));
+            return new Message(Bot::sendMessage($this->from->id, $text, $this->message_id, $reply_keyboard)["result"]);
         }
     }
 
@@ -121,7 +121,12 @@ class User {
     }
 
     public function sendMessage($text, $reply = null, $reply_keyboard = null){
-        return new Message(Bot::sendMessage($this->id, $text, $reply, $reply_keyboard));
+        return new Message(Bot::sendMessage($this->id, $text, $reply, $reply_keyboard)["result"]);
+    }
+
+    # static functions
+    public static function getUser($chat_id){
+        return new User(Bot::getUser($chat_id)["result"]);
     }
 }
 
@@ -136,7 +141,7 @@ class Chat {
     }
 
     public function sendMessage($text, $reply = null){
-        return new Message(Bot::sendMessage($this->id, $text, $reply));
+        return new Message(Bot::sendMessage($this->id, $text, $reply)["result"]);
     }
 }
 

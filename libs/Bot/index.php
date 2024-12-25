@@ -30,7 +30,7 @@ class Bot {
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         
-        // دیریت خطاهای cURL
+        // ��یریت خطاهای cURL
         if (curl_errno($ch)) {
             error_log("خطای cURL: " . curl_error($ch));
             curl_close($ch);
@@ -63,7 +63,7 @@ class Bot {
         if ($reply_keyboard !== null) {
             $data['reply_markup'] = json_encode(['inline_keyboard' => $reply_keyboard]);
         }
-        return self::sendGetRequest('sendMessage', $data);
+        return json_decode(self::sendGetRequest('sendMessage', $data), true);
     }
     
     public static function answerCallbackQuery($callback_query_id, $text = null, $show_alert = false) {
@@ -87,5 +87,14 @@ class Bot {
         ];
         
         return self::sendGetRequest('deleteMessage', $data);
+    }
+
+    public static function getUser($user_id) {
+        $data = [
+            'chat_id' => $user_id
+        ];
+        
+        $response = self::sendGetRequest('getChat', $data);
+        return json_decode($response, true);
     }
 }
