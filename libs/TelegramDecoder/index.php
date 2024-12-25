@@ -47,13 +47,13 @@ class CallbackQuery{
 class Message {
     public $message_id;
     public $text;
-    public $from;
-    public $chat;
-    public $photo;
-    public $video;
-    public $document;
-    public $reply_to_message; // پیام ریپلای شده
-    public $forward_from; // پیام فروارد شده
+    public User $from;
+    public Chat $chat;
+    public Photo $photo;
+    public Video $video;
+    public Document $document;
+    public Message $reply_to_message; // پیام ریپلای شده
+    public User $forward_from; // پیام فروارد شده
     public $forward_date; // تاریخ فروارد
 
     public function __construct($data) {
@@ -77,7 +77,7 @@ class Message {
             $this->document = new Document($data['document']);
         }
 
-        // اگر پیام ریپلای شده باشد
+        // اگ�� پیام ریپلای شده باشد
         if (isset($data['reply_to_message'])) {
             $this->reply_to_message = new Message($data['reply_to_message']);
         }
@@ -95,10 +95,14 @@ class Message {
 
     public function reply_text($View = null, $reply_keyboard = null, $text = null){
         if($View != null){
-            Bot::sendMessage($this->from->id, $View->text, $this->message_id, $View->inline_keyboard);    
+            return new Message(Bot::sendMessage($this->from->id, $View->text, $this->message_id, $View->inline_keyboard));    
         }else{
-            Bot::sendMessage($this->from->id, $text, $this->message_id, $reply_keyboard);
+            return new Message(Bot::sendMessage($this->from->id, $text, $this->message_id, $reply_keyboard));
         }
+    }
+
+    public function deleteMessage(){
+        return Bot::deleteMessage($this->chat->id, $this->message_id);
     }
 }
 
@@ -117,7 +121,7 @@ class User {
     }
 
     public function sendMessage($text, $reply = null, $reply_keyboard = null){
-        Bot::sendMessage($this->id, $text, $reply, $reply_keyboard);
+        return new Message(Bot::sendMessage($this->id, $text, $reply, $reply_keyboard));
     }
 }
 
@@ -132,7 +136,7 @@ class Chat {
     }
 
     public function sendMessage($text, $reply = null){
-        Bot::sendMessage($this->id, $text, $reply);
+        return new Message(Bot::sendMessage($this->id, $text, $reply));
     }
 }
 

@@ -11,7 +11,10 @@ class Bot {
         return parse_ini_file("config.ini", true)["bot"]["base_url"] . "/bot";
     }
 
-    public static function sendGetRequest($url, $params = []) {
+    public static function sendGetRequest($method, $params = []) {
+        $baseUrl = parse_ini_file("config.ini", true)["bot"]["base_url"];
+        $token = parse_ini_file("config.ini", true)["bot"]["token"];
+        $url = $baseUrl . "/bot" . $token . "/" . $method;
 
         if (!empty($params)) {
             $url .= '?' . http_build_query($params);
@@ -27,7 +30,7 @@ class Bot {
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         
-        // مدیریت خطاهای cURL
+        // دیریت خطاهای cURL
         if (curl_errno($ch)) {
             error_log("خطای cURL: " . curl_error($ch));
             curl_close($ch);
@@ -48,10 +51,6 @@ class Bot {
     }
     
     public static function sendMessage($chat_id, $text, $reply = null, $reply_keyboard = null) {
-        // ساخت URL اصلی
-        $url = self::getBaseURL() . self::getToken() . "/sendMessage";
-        
-        // داده‌های POST
         $data = [
             'chat_id' => $chat_id,
             'text' => $text,
@@ -62,29 +61,31 @@ class Bot {
         }
 
         if ($reply_keyboard !== null) {
-            // تبدیل آرایه دکمه‌ها به فرمت JSON مورد نیاز تلگرام
             $data['reply_markup'] = json_encode(['inline_keyboard' => $reply_keyboard]);
         }
-        self::sendGetRequest($url, $data);
+        return self::sendGetRequest('sendMessage', $data);
     }
     
     public static function answerCallbackQuery($callback_query_id, $text = null, $show_alert = false) {
-        // ساخت URL برای answerCallbackQuery
-        $url = self::getBaseURL() . self::getToken() . "/answerCallbackQuery";
-        
-        // پارامترهای درخواست
         $data = [
             'callback_query_id' => $callback_query_id
         ];
         
-        // اضافه کردن متن پاسخ اگر وجود داشته باشد
         if ($text !== null) {
             $data['text'] = $text;
         }
         
-        // تنظیم نمایش پیام به صورت alert یا notification
         $data['show_alert'] = $show_alert;
         
-        return self::sendGetRequest($url, $data);
+        return self::sendGetRequest('answerCallbackQuery', $data);
+    }
+
+    public static function deleteMessage($chat_id, $message_id) {
+        $data = [
+            'chat_id' => $chat_id,
+            'message_id' => $message_id
+        ];
+        
+        return self::sendGetRequest('deleteMessage', $data);
     }
 }
