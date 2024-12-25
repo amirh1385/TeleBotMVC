@@ -67,4 +67,24 @@ class Bot {
         }
         self::sendGetRequest($url, $data);
     }
+    
+    public static function answerCallbackQuery($callback_query_id, $text = null, $show_alert = false) {
+        // ساخت URL برای answerCallbackQuery
+        $url = self::getBaseURL() . self::getToken() . "/answerCallbackQuery";
+        
+        // پارامترهای درخواست
+        $data = [
+            'callback_query_id' => $callback_query_id
+        ];
+        
+        // اضافه کردن متن پاسخ اگر وجود داشته باشد
+        if ($text !== null) {
+            $data['text'] = $text;
+        }
+        
+        // تنظیم نمایش پیام به صورت alert یا notification
+        $data['show_alert'] = $show_alert;
+        
+        return self::sendGetRequest($url, $data);
+    }
 }

@@ -10,4 +10,9 @@ class start{
        $view1 = View::returnView("welcome");
        $update->message->reply_text(text:$view1->text, reply_keyboard:$view1->inline_keyboard);
     }
+
+    public static function callback1(TelegramResponse $update){
+        $update->callback_query->answer();
+        $update->callback_query->message->chat->sendMessage("hello");
+    }
 }

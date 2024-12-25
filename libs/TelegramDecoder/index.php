@@ -18,6 +18,9 @@ class TelegramResponse {
         if(isset($data["callback_query"])){
             $this->callback_query = new CallbackQuery($data["callback_query"]);
         }
+        if(isset($fata["chat"])){
+            $this->chat = new Chat($data["chat"]);
+        }
     }
 }
 
@@ -33,6 +36,10 @@ class CallbackQuery{
         $this->message = new Message($update["message"]);
         $this->chat_instance = $update["chat_instance"];
         $this->data = $update["data"];
+    }
+
+    public function answer($text = null, $show_alert = false){
+        Bot::answerCallbackQuery($this->id, $text, $show_alert);
     }
 }
 

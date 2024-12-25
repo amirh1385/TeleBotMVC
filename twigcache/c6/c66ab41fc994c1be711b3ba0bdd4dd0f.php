@@ -42,7 +42,20 @@ class __TwigTemplate_ebe3749654085614ea9d61099e19da8a extends Template
         yield "[text]
 Hello to my ok world
 [InlineKeyboard]
-[[{\"text\": \"hello world\", \"callback_data\": \"[\\\\Controllers\\\\start::start, 'start']\"}]]";
+[
+    [
+        {\"text\": \"hello world12345\", \"callback_data\": \"ffgfdsgd\"},
+        {\"text\": \"hello world\", \"url\": \"https://google.com\"}
+    ],
+        [
+        {\"text\": \"hello world12345\", \"callback_data\": \"ffgfdsgd\"},
+        {\"text\": \"hello world\", \"url\": \"https://google.com\"}
+    ],
+        [
+        {\"text\": \"hello world12345\", \"callback_data\": \"ffgfdsgd\"},
+        {\"text\": \"hello world\", \"url\": \"https://google.com\"}
+    ]
+]";
         yield from [];
     }
 
