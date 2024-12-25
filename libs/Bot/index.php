@@ -63,7 +63,6 @@ class Bot {
 
         if ($reply_keyboard !== null) {
             // تبدیل آرایه دکمه‌ها به فرمت JSON مورد نیاز تلگرام
-            error_log(json_encode(['inline_keyboard' => $reply_keyboard]));
             $data['reply_markup'] = json_encode(['inline_keyboard' => $reply_keyboard]);
         }
         self::sendGetRequest($url, $data);

@@ -1,4 +1,4 @@
 [text]
 Hello to my ok world
 [InlineKeyboard]
-[[{"text": "hello world", "url": "https://google.com"}]]
+[[{"text": "hello world", "callback_data": "[\\Controllers\\start::start, 'start']"}]]

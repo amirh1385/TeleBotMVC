@@ -37,10 +37,12 @@ class View{
         $twig = new \Twig\Environment($loader, [
             'cache' => __DIR__ . "/../../twigcache"
         ]);
-
+    
         $content = $twig->render($name, $datas);
         $parse = self::Parse($content);
-        $inline_keyboard = isset($parse["InlineKeyboard"]) ? json_decode($parse["InlineKeyboard"], true) : null;
+        
+        $inline_keyboard = json_decode(rtrim($parse["InlineKeyboard"]));
+        
         return new View($parse["text"], $inline_keyboard);
     }
 }

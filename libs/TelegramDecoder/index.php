@@ -8,6 +8,7 @@ class TelegramResponse {
     public Message $message;
     public User $user;
     public Chat $chat;
+    public CallbackQuery $callback_query;
 
     public function __construct($data) {
         // چک کردن اینکه آیا پیام شامل داده‌های مربوط به پیام‌هاست

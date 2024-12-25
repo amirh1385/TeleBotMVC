@@ -33,3 +33,21 @@ class CommandHandler{
         }
     }
 }
+
+class CallbackQueryHandler{
+    public $func;
+    public $callback_query;
+
+    public function __construct($func, $callback_query = null) {
+        $this->func = $func;
+        $this->callback_query = $callback_query;
+    }
+
+    public function handle(TelegramResponse $update){
+        if(!isset($update->callback_query)) return;
+        if($this->callback_query == null) call_user_func($this->func, $update);;
+        if($update->callback_query->data == $this->callback_query){
+            call_user_func($this->func, $update);
+        }
+    }
+}
