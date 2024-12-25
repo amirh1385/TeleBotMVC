@@ -29,6 +29,7 @@ composer create-project your-vendor/telegram-bot-framework your-bot
 cp config.ini.example config.ini
 
 3. ویرایش فایل `config.ini` و تنظیم موارد زیر:
+
 [bot]
 base_url = "https://your-domain.com"
 token = "YOUR_BOT_TOKEN"
@@ -45,6 +46,7 @@ php cmd.php migrate
 ## نحوه استفاده
 
 برای تعریف روت‌های جدید، فایل `routes/routes.php` را ویرایش کنید:
+
 use Controllers\start;
 $router->addRoute(new CommandHandler("/start", [start::class, "start"]));
 
