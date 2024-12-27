@@ -104,6 +104,10 @@ class Message {
     public function deleteMessage(){
         return Bot::deleteMessage($this->chat->id, $this->message_id);
     }
+
+    public function pinMessage($disable_notification = false){
+        return Bot::pinChatMessage($this->chat->id, $this->message_id, $disable_notification);
+    }
 }
 
 // کلاس برای کاربران

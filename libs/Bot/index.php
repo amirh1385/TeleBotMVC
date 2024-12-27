@@ -30,7 +30,7 @@ class Bot {
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         
-        // ��یریت خطاهای cURL
+        // ������یریت خطاهای cURL
         if (curl_errno($ch)) {
             error_log("خطای cURL: " . curl_error($ch));
             curl_close($ch);
@@ -96,5 +96,34 @@ class Bot {
         
         $response = self::sendGetRequest('getChat', $data);
         return json_decode($response, true);
+    }
+
+    public static function pinChatMessage($chat_id, $message_id, $disable_notification = false) {
+        $data = [
+            'chat_id' => $chat_id,
+            'message_id' => $message_id,
+            'disable_notification' => $disable_notification
+        ];
+        
+        return self::sendGetRequest('pinChatMessage', $data);
+    }
+
+    public static function getFile($file_id) {
+        $data = [
+            'file_id' => $file_id
+        ];
+        
+        $response = self::sendGetRequest('getFile', $data);
+        $result = json_decode($response, true);
+        
+        if ($result && $result['ok']) {
+            // Add the complete file path using base URL
+            $baseUrl = parse_ini_file("config.ini", true)["bot"]["base_url"];
+            $token = parse_ini_file("config.ini", true)["bot"]["token"];
+            $result['result']['file_url'] = $baseUrl . "/file/bot" . $token . "/" . $result['result']['file_path'];
+            return $result;
+        }
+        
+        return null;
     }
 }

@@ -28,7 +28,7 @@ class CommandHandler{
 
     public function handle(TelegramResponse $update){
         if(!isset($update->message)) return;
-        if(str_starts_with($update->message->text, $this->command)){
+        if($update->message->text == $this->command){
             call_user_func($this->func, $update);
         }
     }
@@ -49,5 +49,17 @@ class CallbackQueryHandler{
         if($update->callback_query->data == $this->callback_query){
             call_user_func($this->func, $update);
         }
+    }
+}
+
+class MessageHandler{
+    public $func;
+    public function __construct($func) {
+        $this->func = $func;
+    }
+
+    public function handle(TelegramResponse $update){
+        if(!isset($update->message)) return;
+        call_user_func($this->func, $update);
     }
 }
