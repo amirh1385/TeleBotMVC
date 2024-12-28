@@ -7,7 +7,7 @@ use Libs\View\View;
 
 class start{
     public static function start(TelegramResponse $update){
-    // $update->message->reply_text(text:"hello world");
+    $update->message->reply_text(text:"hello world1234");
     }
 
     public static function callback1(TelegramResponse $update){

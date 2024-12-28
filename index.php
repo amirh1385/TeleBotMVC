@@ -7,7 +7,6 @@ use Libs\TelegramDecoder;
 use Libs\TelegramDecoder\TelegramResponse;
 
 $update = file_get_contents('php://input');
-error_log($update);
 $update = json_decode($update, TRUE);
 
 $datas = new TelegramDecoder\TelegramResponse($update);
