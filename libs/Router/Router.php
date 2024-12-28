@@ -15,11 +15,7 @@ class Router{
 
     public function handle($update){
         foreach ($this->routes as $key => $value) {
-            $result = $value->handle($update);
-            // اگر یک هندلر موفق بود، از حلقه خارج شویم
-            if ($result !== null) {
-                return $result;
-            }
+            $value->handle($update);
         }
     }
 }
@@ -34,14 +30,7 @@ class CommandHandler{
 
     public function handle(TelegramResponse $update){
         if(!isset($update->message)) return null;
-        if(!isset($update->message->text)) return null;
-        
-        // بررسی می‌کنیم که آیا پیام با دستور ما شروع می‌شود
-        $messageText = trim($update->message->text);
-        $command = trim($this->command);
-        
-        // بررسی می‌کنیم که پیام با دستور ما شروع می‌شود یا خیر
-        if(strpos($messageText, $command) === 0) {
+        if($update->message->text == $this->command){
             return call_user_func($this->func, $update);
         }
         return null;
@@ -117,12 +106,11 @@ class Conversation{
 
         // Get current state from cache
         $current_state = \BotCache\BotCache::getCache($chat_id, $user_id, 'conversation_state');
-        error_log($current_state);
 
         // If no state or invalid state, run start handlers
         if ($current_state === null || !isset($this->states[$current_state])) {
             // اجرای تمام هندلرهای استارت
-            foreach ($this->start as $handler) {
+            foreach ($this->start as $handler) { 
                 $result = $handler->handle($update);
                 
                 if ($result !== null) {

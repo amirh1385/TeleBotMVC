@@ -32,7 +32,15 @@ class BotCache {
         return true;
     }
     
-    private static function getCacheFilename($chat_id, $user_id) {
+    private static function getCacheFilename($chat_id, $user_id = null) {
+        if ($user_id === null) {
+            // فقط برای چت
+            return self::$cacheDir . 'chat_' . $chat_id . '.json';
+        } elseif ($chat_id === null) {
+            // فقط برای کاربر
+            return self::$cacheDir . 'user_' . $user_id . '.json';
+        }
+        // برای ترکیب چت و کاربر
         return self::$cacheDir . 'cache_' . $chat_id . '_' . $user_id . '.json';
     }
     
@@ -44,5 +52,23 @@ class BotCache {
         
         // ساخت فایل با یک آرایه خالی
         file_put_contents($filename, json_encode([], JSON_PRETTY_PRINT));
+    }
+
+    // متدهای جدید برای دسترسی به کش چت
+    public static function getChatCache($chat_id, $key) {
+        return self::getCache($chat_id, null, $key);
+    }
+
+    public static function setChatCache($chat_id, $key, $value) {
+        return self::setCache($chat_id, null, $key, $value);
+    }
+
+    // متدهای جدید برای دسترسی به کش کاربر
+    public static function getUserCache($user_id, $key) {
+        return self::getCache(null, $user_id, $key);
+    }
+
+    public static function setUserCache($user_id, $key, $value) {
+        return self::setCache(null, $user_id, $key, $value);
     }
 }

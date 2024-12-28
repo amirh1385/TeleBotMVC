@@ -3,6 +3,7 @@
 namespace Libs\TelegramDecoder;
 
 use Libs\Bot\Bot;
+use Libs\BotCache\BotCache;
 
 class TelegramResponse {
     public Message $message;
@@ -132,6 +133,14 @@ class User {
     public static function getUser($chat_id){
         return new User(Bot::getUser($chat_id)["result"]);
     }
+
+    public static function getUserCache($user_id, $key){
+        return BotCache::getUserCache($user_id, $key);
+    }
+
+    public static function setUserCache($user_id, $key, $value){
+        return BotCache::setUserCache($user_id, $key, $value);
+    }
 }
 
 // کلاس برای چت‌ها
@@ -146,6 +155,14 @@ class Chat {
 
     public function sendMessage($text, $reply = null){
         return new Message(Bot::sendMessage($this->id, $text, $reply)["result"]);
+    }
+
+    public static function getChatCache($chat_id, $key){
+        return BotCache::getChatCache($chat_id, $key);
+    }
+
+    public static function setChatCache($chat_id, $key, $value){
+        return BotCache::setChatCache($chat_id, $key, $value);
     }
 }
 
